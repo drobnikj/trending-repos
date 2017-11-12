@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel><title>Github tradings rss feed</title>
+    <link>https://github.com/trending/</link>
+    <description>See what the GitHub community is most excited about today.</description>
+    {{#each repos}}
+    <item><title>{{name}}</title>
+      <link>{{url}}</link>
+      <description>{{description}}</description>
+    </item>
+    {{/each}}
+  </channel>
+</rss>

@@ -1,0 +1,25 @@
+{
+  "name": "gh-trending-repos",
+  "version": "1.0.0",
+  "description": "Lightweit server for generating XML feeds for git hub trending respos and history stats of trending repos.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "trendingn",
+    "repos",
+    "github"
+  ],
+  "author": "Jakub Drobnik <drobnik.j@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "apify-client": "^0.1.52",
+    "express": "^4.16.2",
+    "mongodb": "^2.2.33",
+    "server": "^1.0.4"
+  },
+  "engines": {
+    "node": "8.6.0"
+  }
+}
