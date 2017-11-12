@@ -1,6 +1,6 @@
 const server = require('server');
-const { get, post } = server.router;
-const { render, json, type } = server.reply;
+const { get } = server.router;
+const { render, type } = server.reply;
 const ApifyClient = require('apify-client');
 const MongoClient = require('mongodb').MongoClient;
 
@@ -24,11 +24,9 @@ const getHomePage = get('/', () => {
 });
 const getRssFeed = get('/rss/:language', async ctx => {
     const language = ctx.params.language;
-    if (language === 'javascript') {
-        const todayCollection = db.collection('trendingToday');
-        const repos = await todayCollection.find({ language }).toArray();
-        return type('xml').render('xml_feed.hbs', { repos, language });
-    }
+    const todayCollection = db.collection('trendingToday');
+    const repos = await todayCollection.find({ language }).toArray();
+    return type('xml').render('xml_feed.hbs', { repos, language });
 });
 
 const getGitHubReposToday = async () => {
