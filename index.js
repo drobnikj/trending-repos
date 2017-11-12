@@ -27,7 +27,7 @@ const getRssFeed = get('/rss/:language', async ctx => {
     if (language === 'javascript') {
         const todayCollection = db.collection('trendingToday');
         const repos = await todayCollection.find({ language }).toArray();
-        return type('xml').render('xml_feed.hbs', { repos });
+        return type('xml').render('xml_feed.hbs', { repos, language });
     }
 });
 
@@ -57,6 +57,7 @@ const getGitHubReposToday = async () => {
     } else {
         console.log('Act Fail!!');
     }
+    console.log('GitHub repos updated.')
 };
 
 // Connect to MongoDB and start server
@@ -70,6 +71,7 @@ MongoClient.connect(process.env.MONGO_URL, (err, database) => {
         server(getHomePage, getRssFeed).then(ctx => {
             console.log(`Server launched on http://localhost:${ctx.options.port}/`);
         });
+        // Set automatic repos update
         setInterval(getGitHubReposToday, 60*60*1000);
     }
 });
