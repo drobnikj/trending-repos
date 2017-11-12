@@ -17,6 +17,7 @@
   "dependencies": {
     "apify-client": "^0.1.52",
     "express": "^4.16.2",
+    "moment": "^2.19.2",
     "mongodb": "^2.2.33",
     "server": "^1.0.4"
   },

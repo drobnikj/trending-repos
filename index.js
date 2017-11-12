@@ -3,6 +3,7 @@ const { get } = server.router;
 const { render, type } = server.reply;
 const ApifyClient = require('apify-client');
 const MongoClient = require('mongodb').MongoClient;
+const moment = require('moment');
 
 const TRENDING_LANGUAGES = ['unknown', 'javascript', 'makefile', 'python', 'ruby'];
 const GITHUB_PAGES = TRENDING_LANGUAGES.map(language => {
@@ -25,7 +26,10 @@ const getHomePage = get('/', () => {
 const getRssFeed = get('/rss/:language', async ctx => {
     const language = ctx.params.language;
     const todayCollection = db.collection('trendingToday');
-    const repos = await todayCollection.find({ language }).toArray();
+    const repos = await todayCollection.find({ language }).sort({ cratedAt: 1 }).limit(50).toArray();
+    repos.map((repo) => {
+       repo.createdAt = moment(repo.createdAt).format('ddd, DD MMM YYYY HH:mm:ss ZZ');
+    });
     return type('xml').render('xml_feed.hbs', { repos, language });
 });
 
