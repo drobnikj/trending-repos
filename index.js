@@ -13,6 +13,8 @@ const GITHUB_PAGES = TRENDING_LANGUAGES.map(language => {
     };
 });
 
+const todayCollectionName = 'trendingToday';
+
 const apifyClient = new ApifyClient({
     userId: process.env.USER_ID,
     token: process.env.TOKEN,
@@ -25,8 +27,8 @@ const getHomePage = get('/', () => {
 });
 const getRssFeed = get('/rss/:language', async ctx => {
     const language = ctx.params.language;
-    const todayCollection = db.collection('trendingToday');
-    const repos = await todayCollection.find({ language }).sort({ cratedAt: 1 }).limit(50).toArray();
+    const todayCollection = db.collection(todayCollectionName);
+    const repos = await todayCollection.find({ language }).limit(50).sort({ createdAt: -1 }).toArray();
     repos.map((repo) => {
        repo.createdAt = moment(repo.createdAt).format('ddd, DD MMM YYYY HH:mm:ss ZZ');
     });
@@ -46,7 +48,7 @@ const getGitHubReposToday = async () => {
             storeId: actRun.defaultKeyValueStoreId,
             key: 'OUTPUT',
         });
-        const todayCollection = db.collection('trendingToday');
+        const todayCollection = db.collection(todayCollectionName);
         for (let result of resultsRecord.body) {
             const language =  result.language;
             for (let repo of result.reposList) {
@@ -70,10 +72,11 @@ MongoClient.connect(process.env.MONGO_URL, (err, database) => {
         process.exit(1)
     } else {
         db = database;
+        db.collection(todayCollectionName).ensureIndex({ language:1 , createdAt: -1 });
         server(getHomePage, getRssFeed).then(ctx => {
             console.log(`Server launched on http://localhost:${ctx.options.port}/`);
         });
         // Set automatic repos update
-        setInterval(getGitHubReposToday, 60*60*1000);
+        //setInterval(getGitHubReposToday, 60*60*1000);
     }
 });
