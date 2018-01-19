@@ -5,7 +5,7 @@ const ApifyClient = require('apify-client');
 const MongoClient = require('mongodb').MongoClient;
 const moment = require('moment');
 
-const TRENDING_LANGUAGES = ['unknown', 'javascript', 'makefile', 'python', 'ruby'];
+const TRENDING_LANGUAGES = ['unknown', 'javascript', 'python', 'ruby'];
 const GITHUB_PAGES = TRENDING_LANGUAGES.map(language => {
     return {
         url: `https://github.com/trending/${language}?since=daily`,
